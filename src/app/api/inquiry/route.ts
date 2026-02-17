@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "../../../lib/prisma";
+
+export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
@@ -13,10 +15,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const validMethod = contactMethod === "CALLBACK" || contactMethod === "EMAIL";
-    if (!validMethod) {
+    if (contactMethod !== "CALLBACK" && contactMethod !== "EMAIL") {
       return NextResponse.json(
-        { error: "Contact preference must be Callback or Email." },
+        { error: "Contact preference must be CALLBACK or EMAIL." },
         { status: 400 }
       );
     }
@@ -33,8 +34,8 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true });
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: "Could not submit inquiry." },
       { status: 500 }

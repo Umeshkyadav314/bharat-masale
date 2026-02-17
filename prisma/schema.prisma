@@ -55,7 +55,7 @@ model Inquiry {
   mobile        String
   address       String
   email         String
-  contactMethod String   // "CALLBACK" | "EMAIL"
+  contactMethod String
   message       String?
   createdAt     DateTime @default(now())
 }
