@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 const HERO_VIDEO_SOURCES = [
   "https://assets.mixkit.co/videos/preview/mixkit-going-down-a-curved-highway-through-a-mountain-range-41576-large.mp4",
@@ -13,7 +12,6 @@ const HERO_VIDEO_SOURCES = [
 export default function LandingPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { data: session, status } = useSession();
-  const router = useRouter();
 
   // Auto play video safely
   useEffect(() => {
@@ -24,13 +22,6 @@ export default function LandingPage() {
     video.addEventListener("canplay", play);
     return () => video.removeEventListener("canplay", play);
   }, []);
-
-  // Redirect logged-in users
-  useEffect(() => {
-    if (session) {
-      router.replace("/home");
-    }
-  }, [session, router]);
 
   // Loading state
   if (status === "loading") {
@@ -70,21 +61,28 @@ export default function LandingPage() {
           </span>
         </div>
 
-        {session ? (
-          <Link
-            href="/home"
-            className="rounded-lg border border-white/30 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm hover:bg-white/20"
-          >
-            Go to Website
-          </Link>
-        ) : (
+        <div className="flex items-center gap-2">
           <Link
             href="/login"
             className="rounded-lg border border-white/30 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm hover:bg-white/20"
           >
             Sign in
           </Link>
-        )}
+          <Link
+            href="/register"
+            className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-amber-400"
+          >
+            Sign up
+          </Link>
+          {session && (
+            <Link
+              href="/admin"
+              className="hidden rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 backdrop-blur-sm hover:bg-white/10 md:inline-flex"
+            >
+              Admin
+            </Link>
+          )}
+        </div>
       </header>
 
       {/* Hero Content */}
@@ -103,8 +101,11 @@ export default function LandingPage() {
           href="/home"
           className="mt-10 rounded-lg bg-amber-500 px-8 py-4 font-semibold text-white shadow-xl hover:bg-amber-400"
         >
-          Enter Main Website
+          Explore Our Website
         </Link>
+        <p className="mt-3 max-w-md text-sm text-white/70">
+          Click “Explore Our Website” to open the main site (Home, Products, Prices).
+        </p>
       </div>
 
       {/* Inquiry Form */}

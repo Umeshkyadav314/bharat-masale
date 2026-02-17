@@ -5,5 +5,6 @@ export default withAuth({
 });
 
 export const config = {
-  matcher: ["/home", "/home/:path*", "/admin", "/admin/:path*"],
+  // Keep main website public. Only protect admin routes.
+  matcher: ["/admin", "/admin/:path*"],
 };
